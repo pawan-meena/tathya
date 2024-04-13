@@ -130,7 +130,7 @@
                         rows += '</tr>';
                     });
                     $('#dataBody').html(rows);
-                    renderPagination(Math.ceil(data.records.length / 10), page);
+                    renderPagination(Math.ceil(data.totalCount / 10), page);
                 },
                 error: function () {
                     alert('Error loading data');
