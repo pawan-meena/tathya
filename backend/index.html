@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta charset="UTF-8">
+    <title>UMAAPI</title>
+    <!-- Bootstrap CSS -->
+    <link href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="container mt-5">
+        <h2 class="text-center mb-4">Customers Data</h2>
+        <div class="table-responsive">
+            <table class="table table-responsive-md  table-bordered table-striped">
+                <thead>
+                    <tr>
+                        <!-- <th><input type="checkbox" id="selectAll"></th> -->
+                        <th>Sr. No</th>
+                        <th>Email</th>
+                        <th>Send Mail</th>
+                        <th>Action</th>
+                    </tr>
+                </thead>
+                <tbody id="dataBody">
+                </tbody>
+            </table>
+            <nav aria-label="Page navigation example">
+                <ul class="pagination justify-content-center" id="pagination"></ul>
+            </nav>
+        </div>
+        <!-- <div class="text-center">
+            <button class="btn btn-danger mr-2" id="deleteSelected"><i class="fas fa-trash-alt"></i> Delete Selected</button>
+        </div> -->
+    </div>
+
+    <!-- jQuery -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <!-- Bootstrap JS -->
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+
+    <script>
+        $(document).ready(function () {
+            loadData(1); // Load data for the first page on page load
+
+            $("#selectAll").change(function () {
+                $(".checkbox").prop("checked", $(this).prop("checked"));
+            });
+
+            $("#deleteSelected").click(function () {
+    var ids = [];
+    $(".checkbox:checked").each(function () {
+        ids.push($(this).val());
+    });
+
+    if (ids.length > 0) {
+        $.ajax({
+            url: 'https://academia.vioniko.net/umaapi/umaapi.php?id=' + ids.join(','),
+            type: 'DELETE',
+            dataType: 'json',
+            success: function (response) {
+                alert(response.message);
+                loadData(1); // Reload data for the first page after deletion
+            },
+            error: function () {
+                alert('Error deleting data');
+            }
+        });
+    } else {
+        alert('Please select at least one row to delete');
+    }
+});
+
+        });
+        $(document).on('click', '.deleteRow', function () {
+    var id = $(this).data('id');
+
+    $.ajax({
+        url: 'https://academia.vioniko.net/umaapi/umaapi.php?id=' + id,
+        type: 'DELETE',
+        dataType: 'json',
+        success: function (response) {
+            alert(response.message);
+            loadData(1); 
+        },
+        error: function () {
+            alert('Error deleting data');
+        }
+    });
+});
+        function loadData(page) {
+            $.ajax({
+                url: 'https://academia.vioniko.net/umaapi/umaapi.php?page=' + page,
+                type: 'GET',
+                dataType: 'json',
+                success: function (data) {
+                    var rows = '';
+                    $.each(data.records, function (index, item) {
+                        rows += '<tr>';
+                        // rows += '<td><input type="checkbox" class="checkbox" value="' + item.id + '"></td>';
+                        rows += '<td>' + ((page - 1) * 10 + index + 1) + '</td>';
+                        rows += '<td>' + item.email + '</td>';
+                        rows += '<td><a href="mailto:' + item.email + '" class="btn btn-primary btn-sm"><i class="fas fa-envelope"></i> Send </a></td>';
+                        rows += '<td><button class="btn btn-danger btn-sm deleteRow" data-id="' + item.id + '"><i class="fas fa-trash-alt"></i> Delete</button></td>';
+                        rows += '</tr>';
+                    });
+                    $('#dataBody').html(rows);
+                    renderPagination(Math.ceil(data.records.length / 10), page);
+                },
+                error: function () {
+                    alert('Error loading data');
+                }
+            });
+        }
+
+        function renderPagination(totalPages, currentPage) {
+            var pagination = $('#pagination');
+            pagination.empty();
+
+            var prevClass = currentPage === 1 ? 'disabled' : '';
+            var nextClass = currentPage === totalPages ? 'disabled' : '';
+
+            var prevButton = '<li class="page-item ' + prevClass + '"><a class="page-link" href="#" onclick="loadData(' + (currentPage - 1) + ')">Previous</a></li>';
+            pagination.append(prevButton);
+
+            for (var i = 1; i <= totalPages; i++) {
+                var activeClass = i === currentPage ? 'active' : '';
+                var pageButton = '<li class="page-item ' + activeClass + '"><a class="page-link" href="#" onclick="loadData(' + i + ')">' + i + '</a></li>';
+                pagination.append(pageButton);
+            }
+
+            var nextButton = '<li class="page-item ' + nextClass + '"><a class="page-link" href="#" onclick="loadData(' + (currentPage + 1) + ')">Next</a></li>';
+            pagination.append(nextButton);
+        }
+    </script>
+
+</body>
+
+</html>
