@@ -18,29 +18,44 @@
 
 <body>
 
-    <div class="container mt-5">
-        <h2 class="text-center mb-4">Customers Data</h2>
-        <div class="table-responsive">
-            <table class="table table-responsive-md  table-bordered table-striped">
-                <thead>
-                    <tr>
-                        <!-- <th><input type="checkbox" id="selectAll"></th> -->
-                        <th>Sr. No</th>
-                        <th>Email</th>
-                        <th>Send Mail</th>
-                        <th>Action</th>
-                    </tr>
-                </thead>
-                <tbody id="dataBody">
-                </tbody>
-            </table>
-            <nav aria-label="Page navigation example">
-                <ul class="pagination justify-content-center" id="pagination"></ul>
-            </nav>
-        </div>
-        <!-- <div class="text-center">
+    <script>
+        // Function to prompt for password
+        function showPasswordPrompt() {
+            var password = prompt("Please enter the password:");
+            if (password === "uma123456") {
+                document.getElementById("content").style.display = "block"; // Display content if password is correct
+            } else {
+                alert("Incorrect password. Access denied.");
+                window.location.href = "about:blank"; // Redirect to a blank page if password is incorrect
+            }
+        }
+    </script>
+
+    <div id="content" style="display: none;"> <!-- Content hidden by default -->
+        <div class="container mt-5">
+            <h2 class="text-center mb-4">Customers Data</h2>
+            <div class="table-responsive">
+                <table class="table table-responsive-md  table-bordered table-striped">
+                    <thead>
+                        <tr>
+                            <!-- <th><input type="checkbox" id="selectAll"></th> -->
+                            <th>Sr. No</th>
+                            <th>Email</th>
+                            <th>Send Mail</th>
+                            <th>Action</th>
+                        </tr>
+                    </thead>
+                    <tbody id="dataBody">
+                    </tbody>
+                </table>
+                <nav aria-label="Page navigation example">
+                    <ul class="pagination justify-content-center" id="pagination"></ul>
+                </nav>
+            </div>
+            <!-- <div class="text-center">
             <button class="btn btn-danger mr-2" id="deleteSelected"><i class="fas fa-trash-alt"></i> Delete Selected</button>
         </div> -->
+        </div>
     </div>
 
     <!-- jQuery -->
@@ -57,46 +72,47 @@
             });
 
             $("#deleteSelected").click(function () {
-    var ids = [];
-    $(".checkbox:checked").each(function () {
-        ids.push($(this).val());
-    });
+                var ids = [];
+                $(".checkbox:checked").each(function () {
+                    ids.push($(this).val());
+                });
 
-    if (ids.length > 0) {
-        $.ajax({
-            url: 'https://academia.vioniko.net/umaapi/umaapi.php?id=' + ids.join(','),
-            type: 'DELETE',
-            dataType: 'json',
-            success: function (response) {
-                alert(response.message);
-                loadData(1); // Reload data for the first page after deletion
-            },
-            error: function () {
-                alert('Error deleting data');
-            }
+                if (ids.length > 0) {
+                    $.ajax({
+                        url: 'https://academia.vioniko.net/umaapi/umaapi.php?id=' + ids.join(','),
+                        type: 'DELETE',
+                        dataType: 'json',
+                        success: function (response) {
+                            alert(response.message);
+                            loadData(1); // Reload data for the first page after deletion
+                        },
+                        error: function () {
+                            alert('Error deleting data');
+                        }
+                    });
+                } else {
+                    alert('Please select at least one row to delete');
+                }
+            });
+
+            $(document).on('click', '.deleteRow', function () {
+                var id = $(this).data('id');
+
+                $.ajax({
+                    url: 'https://academia.vioniko.net/umaapi/umaapi.php?id=' + id,
+                    type: 'DELETE',
+                    dataType: 'json',
+                    success: function (response) {
+                        alert(response.message);
+                        loadData(1); 
+                    },
+                    error: function () {
+                        alert('Error deleting data');
+                    }
+                });
+            });
         });
-    } else {
-        alert('Please select at least one row to delete');
-    }
-});
 
-        });
-        $(document).on('click', '.deleteRow', function () {
-    var id = $(this).data('id');
-
-    $.ajax({
-        url: 'https://academia.vioniko.net/umaapi/umaapi.php?id=' + id,
-        type: 'DELETE',
-        dataType: 'json',
-        success: function (response) {
-            alert(response.message);
-            loadData(1); 
-        },
-        error: function () {
-            alert('Error deleting data');
-        }
-    });
-});
         function loadData(page) {
             $.ajax({
                 url: 'https://academia.vioniko.net/umaapi/umaapi.php?page=' + page,
@@ -141,6 +157,9 @@
             var nextButton = '<li class="page-item ' + nextClass + '"><a class="page-link" href="#" onclick="loadData(' + (currentPage + 1) + ')">Next</a></li>';
             pagination.append(nextButton);
         }
+
+        // Call function to prompt for password when the page loads
+        showPasswordPrompt();
     </script>
 
 </body>
