@@ -1,6 +1,6 @@
 /* style.css */
 body {
-  font-family: Arial, sans-serif;
+  font-family: "Raleway", "Open Sans", sans-serif;
   line-height: 1.6;
   margin: 0;
   padding-top: 60px;
@@ -11,23 +11,24 @@ nav {
 
 .navbar {
   list-style: none;
-  background-color: rgba(51, 51, 51, 0.8); 
+  background-color: rgba(51, 51, 51, 0.8);
   text-align: center;
   margin: 0;
   padding: 0;
   width: 100%;
-  position: fixed; 
-  top: 0; 
-  z-index: 1000; 
+  position: fixed;
+  top: 0;
+  z-index: 1000;
   display: flex;
   justify-content: center;
   max-width: 90%;
   margin-top: 1rem;
-  border-color: rgb(181, 160, 129);
+  /* border-color: rgb(181, 160, 129); */
   border-style: solid;
   border-width: 0.1px;
   border-radius: 5px;
   opacity: 0.99;
+  transition: background-color 0.3s, color 0.3s, transform 0.3s;
 }
 
 .navbar li {
@@ -40,7 +41,9 @@ nav {
   color: white;
 }
 .navbar a:hover {
-  background-color: #555;
+  /* scale: 1.2; */
+  transform: scale(1.2);
+  /* background-color: #555; */
 }
 section {
   padding: 20px;
@@ -51,9 +54,9 @@ section {
 #hero {
   height: 100vh;
   background-image: url("/images/bg.webp");
-  background-size: cover; 
+  background-size: cover;
   background-position: center;
-  background-repeat: no-repeat; 
+  background-repeat: no-repeat;
   color: #fff;
   display: flex;
   justify-content: center;
@@ -73,6 +76,9 @@ section {
   font-size: 39px;
   margin-bottom: 0;
 }
+#hero .heroInside p {
+  font-size: 20px;
+}
 
 #hero .heroInside .btn {
   background-color: #fff;
@@ -80,51 +86,79 @@ section {
   padding: 20px 40px;
   border-radius: 5px;
   font-weight: 500;
+  cursor: pointer;
+  transition: background-color 0.3s, color 0.3s, transform 0.3s;
+}
+#hero .heroInside .btn:hover {
+  background-color: #393333;
+  color: white;
+  transform: scale(1.05);
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
 }
 #about .about1 {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-  }
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+#about h2 {
+  margin: 50px;
+  font-size: xx-large;
+}
 #about .about1 {
-  margin: 40px 0;
+  margin: 40px 30px;
   align-items: center;
   color: #3a3838;
 }
 #about .about1 img {
-  max-width: 650px;
+  max-width: 600px;
+  border-radius: 15px;
 }
 
 #about .about1 > div {
   width: 50%;
+  padding: 0 20px;
 }
-
+h1 {
+  font-size: xx-large;
+}
+p {
+  font-size: 20px;
+}
 #contact {
+  display: flex; /* Enable flexbox */
+  flex-direction: column; /* Stack children vertically */
+  justify-content: center; /* Center vertically */
+  align-items: center;
   margin: 40px;
   margin-bottom: 80px;
   text-align: center;
   width: 90%;
+  height: 50vh;
 }
 
 #contact input {
-  background-color: #cac4c4;
-  padding: 10px 20px;
+  background-color: #f0efef;
+  padding: 20px 40px 20px 20px;
   border: none;
+  margin-right: 12px;
+}
+#contact form {
+  width: 100%;
 }
 #contact input:focus {
-  border: 2px solid black; 
+  border: 0.4px solid black;
 }
 
 #contact button {
   background-color: #272626;
-  padding: 10px 20px;
+  padding: 20px 40px;
   border: none;
   border-radius: 5px;
   color: white;
   transition: background-color 0.3s;
 }
 #contact button:active {
-  border: 2px solid black; 
+  border: 2px solid black;
 }
 
 input[type="email"] {
@@ -153,6 +187,7 @@ input[type="email"]:focus {
   align-items: center;
   justify-content: center;
   margin: 60px 0;
+  height: 80vh;
 }
 .inner-pricing > div {
   width: 33%;
@@ -161,6 +196,7 @@ input[type="email"]:focus {
 }
 .inner-pricing img {
   width: 100%;
+  border-radius: 15px;
 }
 #pricing .card {
   display: flex;
@@ -172,10 +208,19 @@ input[type="email"]:focus {
 #pricing .card p {
   font-size: 22px;
 }
-
+#pricing .card h2 {
+  font-size: 22px;
+  font-weight: 600;
+}
+.thirdpriceCard p {
+  height: 50px;
+}
 #pricing .footer {
   display: flex;
   justify-content: space-between;
+  font-family: "Open Sans", sans-serif;
+  color: #9b9191;
+  font-weight: 300;
 }
 
 @media (max-width: 768px) {
@@ -188,10 +233,14 @@ input[type="email"]:focus {
 }
 
 @media (max-width: 768px) {
+  #about h2 {
+    margin: 0;
+  }
   #about .about1 {
-    display: block; 
+    display: block;
     justify-content: center;
     align-items: center;
+    margin: 0;
   }
   #about .about1 > div {
     width: 100%;
@@ -203,12 +252,16 @@ input[type="email"]:focus {
   #contact {
     width: auto;
   }
+  #contact h1{
+    font-size: x-large;
+  }
   #pricing {
     margin: 0;
   }
   .inner-pricing {
     display: block;
     width: auto;
+    height: auto;
   }
   .inner-pricing > div {
     width: auto;
@@ -216,7 +269,17 @@ input[type="email"]:focus {
       display: block;
     }
   }
-  #pricing .footer{
+  #pricing .footer {
     display: block;
+  }
+  .input-container {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+  }
+  .input-container input {
+    width: 90%;
+    margin: 15px 0;
   }
 }
